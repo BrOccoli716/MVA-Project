@@ -1,0 +1,51 @@
+---
+title: "Final Project"
+author: "Yiming Fu, 2020012851"
+date: '2023-06-16'
+output: html_document
+---
+## Factor Analysis
+```{r setup, include=TRUE}
+library(Rgraphviz)
+library(psych)
+data_raw = read.csv("data/data_df.csv", header=T)
+data_X = data_raw[,3:14]
+data_X
+fa_res = fa(data_X, nfactors=3, rotate="varimax")
+fa_res$loadings
+
+```
+
+## Canonical Correlation Analysis
+```{r, include=TRUE}
+data_raw = read.csv("data/data_df.csv", header=T)
+data_raw = read.csv("data/data_df.csv", header=T)
+data_X = data_raw[,3:14]
+front = data_X[,c(2,4,6)]
+front
+```
+
+## Cluster Analysis
+### elbow plot
+```{r, include=TRUE}
+library(factoextra)
+data = read.csv("data/df_new.csv", header=T)
+data
+set.seed(150)
+fviz_nbclust(data[,c("前场","中场","后场")], kmeans, method="wss")+
+  geom_vline(xintercept=3,linetype=2)
+team = rep(0, 32)
+for(i in 1:32){
+  team[i] = data[i,"球队"]
+}
+length(team)
+row.names(data) = team
+data = data[,c("前场","中场","后场")]
+```
+
+### cluster plot
+```{r, include=TRUE}
+km.res = kmeans(data, 3, nstart=25)
+km.res
+fviz_cluster(km.res, data=data[,1:3], labelsize=6, repel=TRUE)
+```
